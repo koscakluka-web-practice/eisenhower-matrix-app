@@ -1,13 +1,276 @@
+$tiny-width: 300px;
+$phone-width: 550px;
+$tablet-width: 768px;
+$ultra-wide-width: 1160px;
+
+$border-radius: 4px;
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+}
+
 body {
   margin: 0;
+
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  color: #FFF;
+
+  @media (max-width: $tiny-width) {
+    font-size: calc(5vw);
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+ul.task-list {
+  list-style: none;
+  padding: 0;
+
+  overflow: auto;
+
+  li {
+    border: 2px solid #000;
+    padding: 5px;
+    margin: 2px 0;
+
+    border-radius: $border-radius;
+    box-shadow: 0px 1px 3px rgba(100, 100, 100, 0.75);
+
+    background-image: linear-gradient(rgba(255,255,255, 0.2), rgba(255,255,255, 0.1));
+
+    font-size: 0.92em;
+
+    cursor:grab;
+  }
+
+  li:hover {
+    background-image: linear-gradient(rgba(255,255,255, 0.3), rgba(255,255,255, 0.2));
+    //border-color: #ffdc18;
+    //text-decoration: none;
+  }
+}
+
+.panel {
+  padding: 15px;
+
+  border: 2px solid #404040;
+  box-shadow: 0 1px 5px #606060bf;
+
+  background-image: radial-gradient(at 30% 30%, #00000000, #00000032);
+}
+
+
+#root {
+  width: 100%;
+  height: 100%;
+
+  background-image: linear-gradient(to right, rgba(0,0,0, 0.85) 0 100%),
+  url("src/assets/images/background.jpg");
+  background-size: cover;
+}
+
+#container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+
+  display: grid;
+
+  grid-template-rows: 3rem 1fr;
+  grid-template-areas:
+    "header"
+    "content";
+
+}
+
+header {
+  grid-area: header;
+
+  padding: 1rem;
+  background-color: #202020;
+
+  font-weight: bold;
+}
+
+main {
+  grid-area: content;
+
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+
+  @media (min-width: $tablet-width) {
+  display: grid;
+  align-items: center;
+
+  grid-template-columns: 2fr 1fr;
+  grid-template-areas:
+    "matrix tasklist";
+  }
+  @media (min-width: $ultra-wide-width) {
+    width: calc($ultra-wide-width);
+    margin: 0 auto;
+
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+#matrix {
+  padding: 10px;
+  grid-area: matrix;
+
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: $tablet-width) {
+    padding-bottom: calc(10px + 4em);
+  }
+
+  @media (min-width: $phone-width) {
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    gap: 5px;
+
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 350px 350px;
+    grid-template-areas:
+      "do-quadrant schedule-quadrant"
+      "delegate-quadrant delete-quadrant";
+  }
+
+  @media (min-width: $tablet-width) {
+    grid-template-columns: 2rem 1fr 1fr;
+    grid-template-rows: 2rem 350px 350px;
+    grid-template-areas:
+    "_ urgent-header not-urgent-header"
+    "important-header do-quadrant schedule-quadrant"
+    "not-important-header delegate-quadrant delete-quadrant";
+  }
+
+  @media (min-width: $ultra-wide-width) {
+    grid-template-columns: 2rem 350px 350px;
+
+  }
+
+  .matrix-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+
+    background-color: #505050;
+    margin: 2px;
+
+    border-radius: 5px;
+
+    @media (max-width: $tablet-width) {
+      display: none;
+    }
+  }
+
+  .matrix-header-column {
+    @extend .matrix-header;
+    writing-mode:vertical-lr;
+    transform: rotate(180deg);
+  }
+
+  #urgent-header {
+    grid-area: urgent-header;
+  }
+
+  #not-urgent-header {
+    grid-area: not-urgent-header;
+  }
+
+  #important-header {
+    grid-area: important-header;
+  }
+
+  #not-important-header {
+    grid-area: not-important-header;
+
+    opacity: 0.7;
+  }
+
+  #do-quadrant {
+    grid-area: do-quadrant;
+    background-color: #590d0d;
+    border-top-left-radius: $border-radius;
+
+    ul.task-list li {
+      border-color: #3d0909;
+    }
+  }
+
+  #schedule-quadrant {
+    grid-area: schedule-quadrant;
+    background-color: #1d2e28;
+    border-top-right-radius: $border-radius;
+
+    ul.task-list li {
+      border-color: #1d2e28;
+    }
+  }
+
+  #delegate-quadrant {
+    grid-area: delegate-quadrant;
+    background-color: #00183b;
+    border-bottom-left-radius: $border-radius;
+
+    ul.task-list li {
+      border-color: #00183b;
+    }
+
+    opacity: 0.7;
+  }
+
+  #delete-quadrant {
+    grid-area: delete-quadrant;
+
+    background-color: #505050;
+    border-bottom-right-radius: $border-radius;
+
+    opacity: 0.7;
+
+    ul.task-list > li {
+      border-color: #404040;
+    }
+  }
+}
+
+#tasklist {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  width: calc(100% - 30px);
+  height: 4em;
+  padding: 0 15px;
+  overflow: auto;
+
+  border-radius: $border-radius;
+  border-top: 2px solid #606060;
+  background-color: #505050;
+
+  ul.task-list > li {
+    border-color: #404040;
+  }
+
+  @media (min-width: $tablet-width) {
+    grid-area: tasklist;
+
+    width: auto;
+    height: calc(2rem + 350px * 2 + 4px);
+    margin: 10px 20px 10px 10px;
+
+    border: 2px solid #606060;
+
+    position: static;
+
+  }
 }
